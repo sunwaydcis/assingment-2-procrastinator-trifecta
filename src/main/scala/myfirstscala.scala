@@ -88,6 +88,7 @@ class EconomicalAnalysis extends AnalysisStrategy {
   def analyze(data: List[Booking]): Unit = {
     if (data.isEmpty) return
 
+    // Groups by hotel to find the averages
     val stats = data
       .groupBy(b => (b.hotelName, b.destinationCountry, b.destinationCity))
       .map { case ((hotel, country, city), list) =>
@@ -99,6 +100,7 @@ class EconomicalAnalysis extends AnalysisStrategy {
         )
       }.toList
 
+    // Pulls out the values to find the min and max
     val prices = stats.map(_._4)
     val discs = stats.map(_._5)
     val margins = stats.map(_._6)
