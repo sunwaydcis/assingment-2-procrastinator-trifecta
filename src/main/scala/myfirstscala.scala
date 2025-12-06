@@ -110,3 +110,21 @@ class EconomicalAnalysis extends AnalysisStrategy {
           list.map(_.profitMargin).sum / list.size
         )
       }.toList
+
+    val prices = stats.map(._4
+    );
+    val discs = stats.map(.5);
+    val margins = stats.map(._6
+    )
+    val (minP, maxP) = (prices.min, prices.max)
+    val (minD, maxD) = (discs.min, discs.max)
+    val (minM, maxM) = (margins.min, margins.max)
+
+    val scored = stats.map { case (hotel, country, city, price, disc, margin) =>
+      val priceScore = 1.0 - MathUtils.normalize(price, minP, maxP)
+      val margScore = 1.0 - MathUtils.normalize(margin, minM, maxM)
+      val discScore = MathUtils.normalize(disc, minD, maxD)
+
+      val totalScore = (priceScore + discScore + margScore) / 3.0
+      (hotel, country, city, totalScore)
+    }
