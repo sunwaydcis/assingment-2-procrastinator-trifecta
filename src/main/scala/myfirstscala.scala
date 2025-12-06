@@ -109,6 +109,7 @@ class EconomicalAnalysis extends AnalysisStrategy {
     val (minD, maxD) = (discs.min, discs.max)
     val (minM, maxM) = (margins.min, margins.max)
 
+    // Calculates the final score for each hotel
     val scored = stats.map { case (hotel, country, city, price, disc, margin) =>
       val priceScore = 1.0 - MathUtils.normalize(price, minP, maxP)
       val margScore = 1.0 - MathUtils.normalize(margin, minM, maxM)
@@ -134,6 +135,7 @@ class ProfitableAnalysis extends AnalysisStrategy {
   def analyze(data: List[Booking]): Unit = {
     if (data.isEmpty) return
 
+    // Groups data to sum up visitors and average the profit margin
     val stats = data
       .groupBy(b => (b.hotelName, b.destinationCountry, b.destinationCity))
       .map { case ((hotel, country, city), list) =>
@@ -149,6 +151,7 @@ class ProfitableAnalysis extends AnalysisStrategy {
     val (minV, maxV) = (visitors.min, visitors.max)
     val (minM, maxM) = (margins.min, margins.max)
 
+    // Scales the data to make the comparison fair
     val scored = stats.map { case (hotel, country, city, vis, marg) =>
       val visScore = MathUtils.normalize(vis.toDouble, minV, maxV)
       val margScore = MathUtils.normalize(marg, minM, maxM)
