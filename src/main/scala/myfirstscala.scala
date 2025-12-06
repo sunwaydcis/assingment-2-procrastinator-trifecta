@@ -128,7 +128,7 @@ class EconomicalAnalysis extends AnalysisStrategy {
       val totalScore = (priceScore + discScore + margScore) / 3.0
       (hotel, country, city, totalScore)
     }
-    
+
     val winner = scored.maxBy(_._4)
     println("\n2. Most Economical Hotel Option")
     println("(Criteria: Avg Price (Low), Avg Discount (High), Avg Margin (Low))")
@@ -139,3 +139,13 @@ class EconomicalAnalysis extends AnalysisStrategy {
     println(f"   Economical Score    : ${winner._4}%.4f")
   }
 }
+
+object HotelAnalysisProgram {
+  def main(args: Array[String]): Unit = {
+    // ... [Loading logic same as before] ...
+    val filename = "Hotel_Dataset.csv"
+    println("System: Initializing Data Load...")
+    val bookings = DataLoader.loadBookings(filename)
+
+    if (bookings.nonEmpty) {
+      println(s"System: Loaded ${bookings.size} bookings successfully.")
