@@ -20,10 +20,12 @@ object DataLoader {
   def loadBookings(filename: String): List[Booking] = {
     Try(Source.fromFile(filename)) match {
       case Success(source) =>
-        val lines = source.getLines().drop(1).toList
+        val allLines = source.getLines().toList
         source.close()
+        if (allLines.isEmpty) return List.empty[Booking]
+        val headerMap = DataParser.parseHeader(allLines.head)
         //Parse Line error Handling
-        lines.flatMap(DataParser.parseLine)
+        allLines.tail.flatMap(line => DataParser.parseLine(line, headerMap))
       case Failure(e) =>
         println(s"Error loading file '$filename': ${e.getMessage}")
         List.empty[Booking]
@@ -37,20 +39,24 @@ object DataParser {
   //Handles Percentage Strings
   private def parsePercent(s: String): Double = Try(s.replace("%", "").trim.toDouble / 100.0).getOrElse(0.0)
 
+  def parseHeader(headerLine: String): Map[String, Int] = {
+    headerLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1).map(_.trim).zipWithIndex.toMap
+  }
+
   // Turns a text line into a Booking object
-  def parseLine(line: String): Option[Booking] = {
+  def parseLine(line: String, headerMap: Map[String, Int]): Option[Booking] = {
     val cols = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1).map(_.trim)
     // Checks if the row has enough columns
-    if (cols.length > 23) {
+    if (cols.length >= headerMap.size) {
       Some(Booking(
-        id = cols(0),
-        destinationCountry = cols(9),
-        destinationCity = cols(10),
-        noOfPeople = Try(cols(11).toInt).getOrElse(1),
-        hotelName = cols(16),
-        price = parseDouble(cols(20)),
-        discount = parsePercent(cols(21)),
-        profitMargin = parseDouble(cols(23))
+        id = cols(headerMap("Booking ID")),
+        destinationCountry = cols(headerMap("Destination Country")),
+        destinationCity = cols(headerMap("Destination City")),
+        noOfPeople = Try(cols(headerMap("No. Of People")).toInt).getOrElse(1),
+        hotelName = cols(headerMap("Hotel Name")),
+        price = parseDouble(cols(headerMap("Booking Price[SGD]"))),
+        discount = parsePercent(cols(headerMap("Discount"))),
+        profitMargin = parseDouble(cols(headerMap("Profit Margin")))
       ))
     } else None
   }
