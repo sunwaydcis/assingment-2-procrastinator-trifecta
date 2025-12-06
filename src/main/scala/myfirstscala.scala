@@ -69,8 +69,29 @@ class CountryAnalysis extends AnalysisStrategy {
       .maxBy(_._2)
 
     //Question 1 output
+    println("\n1. Country with Highest Bookings")
+    println("=" * 50)
     println(f"   Country        : ${topCountry._1}")
     println(f"   Total Bookings : ${topCountry._2}")
   }
 }
 
+//output function for question1 
+object HotelAnalysisProgram {
+  def main(args: Array[String]): Unit = {
+    val filename = "Hotel_Dataset.csv"
+    println("System: Initializing Data Load...")
+    val bookings = DataLoader.loadBookings(filename)
+
+    if (bookings.nonEmpty) {
+      println(s"System: Loaded ${bookings.size} bookings successfully.")
+
+      val strategies: List[AnalysisStrategy] = List(
+        new CountryAnalysis()
+      )
+      strategies.foreach(_.analyze(bookings))
+    } else {
+      println("System: Aborting analysis due to data load failure.")
+    }
+  }
+}
