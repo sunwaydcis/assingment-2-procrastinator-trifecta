@@ -149,3 +149,14 @@ object HotelAnalysisProgram {
 
     if (bookings.nonEmpty) {
       println(s"System: Loaded ${bookings.size} bookings successfully.")
+
+      val strategies: List[AnalysisStrategy] = List(
+        new CountryAnalysis(),
+        new EconomicalAnalysis()
+      )
+      strategies.foreach(_.analyze(bookings))
+    }
+    else {
+      println("System: Aborting analysis due to data load failure.")
+    }
+  }
