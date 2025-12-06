@@ -180,7 +180,7 @@ object HotelAnalysisProgram {
 
     if (bookings.nonEmpty) {
       println(s"System: Loaded ${bookings.size} bookings successfully.")
-
+      // Puts the strategies in a list to run them
       val strategies: List[AnalysisStrategy] = List(
         new CountryAnalysis(),
         new EconomicalAnalysis(),
