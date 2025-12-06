@@ -59,7 +59,7 @@ trait AnalysisStrategy {
   def analyze(data: List[Booking]): Unit
 }
 
-//Question
+//Question 1
 class CountryAnalysis extends AnalysisStrategy {
   def analyze(data: List[Booking]): Unit = {
     if (data.isEmpty) return
@@ -73,26 +73,6 @@ class CountryAnalysis extends AnalysisStrategy {
     println("=" * 50)
     println(f"   Country        : ${topCountry._1}")
     println(f"   Total Bookings : ${topCountry._2}")
-  }
-}
-
-//output function for question1 
-object HotelAnalysisProgram {
-  def main(args: Array[String]): Unit = {
-    val filename = "Hotel_Dataset.csv"
-    println("System: Initializing Data Load...")
-    val bookings = DataLoader.loadBookings(filename)
-
-    if (bookings.nonEmpty) {
-      println(s"System: Loaded ${bookings.size} bookings successfully.")
-
-      val strategies: List[AnalysisStrategy] = List(
-        new CountryAnalysis()
-      )
-      strategies.foreach(_.analyze(bookings))
-    } else {
-      println("System: Aborting analysis due to data load failure.")
-    }
   }
 }
 
@@ -111,11 +91,10 @@ class EconomicalAnalysis extends AnalysisStrategy {
         )
       }.toList
 
-    val prices = stats.map(._4
-    );
-    val discs = stats.map(.5);
-    val margins = stats.map(._6
-    )
+    val prices = stats.map(_._4)
+    val discs = stats.map(_._5)
+    val margins = stats.map(_._6)
+
     val (minP, maxP) = (prices.min, prices.max)
     val (minD, maxD) = (discs.min, discs.max)
     val (minM, maxM) = (margins.min, margins.max)
@@ -140,9 +119,9 @@ class EconomicalAnalysis extends AnalysisStrategy {
   }
 }
 
+//execution program
 object HotelAnalysisProgram {
   def main(args: Array[String]): Unit = {
-    // ... [Loading logic same as before] ...
     val filename = "Hotel_Dataset.csv"
     println("System: Initializing Data Load...")
     val bookings = DataLoader.loadBookings(filename)
@@ -151,12 +130,31 @@ object HotelAnalysisProgram {
       println(s"System: Loaded ${bookings.size} bookings successfully.")
 
       val strategies: List[AnalysisStrategy] = List(
-        new CountryAnalysis(),
-        new EconomicalAnalysis()
+        new CountryAnalysis()
       )
       strategies.foreach(_.analyze(bookings))
-    }
-    else {
+    } else {
       println("System: Aborting analysis due to data load failure.")
     }
+
+    def main(args: Array[String]): Unit = {
+      // ... [Loading logic same as before] ...
+      val filename = "Hotel_Dataset.csv"
+      println("System: Initializing Data Load...")
+      val bookings = DataLoader.loadBookings(filename)
+
+      if (bookings.nonEmpty) {
+        println(s"System: Loaded ${bookings.size} bookings successfully.")
+
+        val strategies: List[AnalysisStrategy] = List(
+          new CountryAnalysis(),
+          new EconomicalAnalysis()
+        )
+        strategies.foreach(_.analyze(bookings))
+      }
+      else {
+        println("System: Aborting analysis due to data load failure.")
+      }
+    }
   }
+}
