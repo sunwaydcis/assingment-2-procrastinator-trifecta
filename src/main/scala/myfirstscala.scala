@@ -39,7 +39,7 @@ object DataParser {
 
   // Turns a text line into a Booking object
   def parseLine(line: String): Option[Booking] = {
-    val cols = line.split(",").map(_.trim)
+    val cols = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1).map(_.trim)
     // Checks if the row has enough columns
     if (cols.length > 23) {
       Some(Booking(
