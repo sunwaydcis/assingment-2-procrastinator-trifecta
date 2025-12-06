@@ -1,6 +1,7 @@
 import scala.io.{Source, Codec}
 import scala.util.{Try, Success, Failure}
 
+// Defines structure for booking data
 case class Booking(
                     id: String,
                     destinationCountry: String,
@@ -13,13 +14,15 @@ case class Booking(
                   )
 
 object DataLoader {
+  //Handles special symbols in the CSV File
   implicit val codec: Codec = Codec("ISO-8859-1")
-
+ //Loads the file safely using Try to handle function
   def loadBookings(filename: String): List[Booking] = {
     Try(Source.fromFile(filename)) match {
       case Success(source) =>
         val lines = source.getLines().drop(1).toList
         source.close()
+        //Parse Line error Handling
         lines.flatMap(DataParser.parseLine)
       case Failure(e) =>
         println(s"Error loading file '$filename': ${e.getMessage}")
