@@ -108,6 +108,7 @@ class EconomicalAnalysis extends AnalysisStrategy {
       (hotel, country, city, totalScore)
     }
 
+    //q2 output
     val winner = scored.maxBy(_._4)
     println("\n2. Most Economical Hotel Option")
     println("(Criteria: Avg Price (Low), Avg Discount (High), Avg Margin (Low))")
@@ -130,31 +131,12 @@ object HotelAnalysisProgram {
       println(s"System: Loaded ${bookings.size} bookings successfully.")
 
       val strategies: List[AnalysisStrategy] = List(
-        new CountryAnalysis()
+        new CountryAnalysis(),
+        new EconomicalAnalysis()
       )
       strategies.foreach(_.analyze(bookings))
     } else {
       println("System: Aborting analysis due to data load failure.")
-    }
-
-    def main(args: Array[String]): Unit = {
-      // ... [Loading logic same as before] ...
-      val filename = "Hotel_Dataset.csv"
-      println("System: Initializing Data Load...")
-      val bookings = DataLoader.loadBookings(filename)
-
-      if (bookings.nonEmpty) {
-        println(s"System: Loaded ${bookings.size} bookings successfully.")
-
-        val strategies: List[AnalysisStrategy] = List(
-          new CountryAnalysis(),
-          new EconomicalAnalysis()
-        )
-        strategies.foreach(_.analyze(bookings))
-      }
-      else {
-        println("System: Aborting analysis due to data load failure.")
-      }
     }
   }
 }
