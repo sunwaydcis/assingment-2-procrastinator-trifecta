@@ -57,11 +57,12 @@ object DataParser {
 }
 
 object MathUtils {
+  // Standard math formula to scale numbers between 0 and 1
   def normalize(value: Double, min: Double, max: Double): Double = {
     if (max == min) 0.0 else (value - min) / (max - min)
   }
 }
-
+// Template for all the analysis questions
 trait AnalysisStrategy {
   def analyze(data: List[Booking]): Unit
 }
