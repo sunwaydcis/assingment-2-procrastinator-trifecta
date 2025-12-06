@@ -128,3 +128,14 @@ class EconomicalAnalysis extends AnalysisStrategy {
       val totalScore = (priceScore + discScore + margScore) / 3.0
       (hotel, country, city, totalScore)
     }
+    
+    val winner = scored.maxBy(_._4)
+    println("\n2. Most Economical Hotel Option")
+    println("(Criteria: Avg Price (Low), Avg Discount (High), Avg Margin (Low))")
+    println("=" * 50)
+    println(f"   Destination Country : ${winner._2}")
+    println(f"   Destination City    : ${winner._3}")
+    println(f"   Hotel Name          : ${winner._1}")
+    println(f"   Economical Score    : ${winner._4}%.4f")
+  }
+}
