@@ -32,11 +32,15 @@ object DataLoader {
 }
 
 object DataParser {
+  //Converts Strings to doubles
   private def parseDouble(s: String): Double = Try(s.trim.toDouble).getOrElse(0.0)
+  //Handles Percentage Strings
   private def parsePercent(s: String): Double = Try(s.replace("%", "").trim.toDouble / 100.0).getOrElse(0.0)
 
+  // Turns a text line into a Booking object
   def parseLine(line: String): Option[Booking] = {
     val cols = line.split(",").map(_.trim)
+    // Checks if the row has enough columns
     if (cols.length > 23) {
       Some(Booking(
         id = cols(0),
