@@ -95,3 +95,18 @@ object HotelAnalysisProgram {
     }
   }
 }
+
+class EconomicalAnalysis extends AnalysisStrategy {
+  def analyze(data: List[Booking]): Unit = {
+    if (data.isEmpty) return
+
+    val stats = data
+      .groupBy(b => (b.hotelName, b.destinationCountry, b.destinationCity))
+      .map { case ((hotel, country, city), list) =>
+        (
+          hotel, country, city,
+          list.map(_.price).sum / list.size,
+          list.map(_.discount).sum / list.size,
+          list.map(_.profitMargin).sum / list.size
+        )
+      }.toList
