@@ -140,3 +140,19 @@ object HotelAnalysisProgram {
     }
   }
 }
+
+class ProfitableAnalysis extends AnalysisStrategy {
+  def analyze(data: List[Booking]): Unit = {
+    if (data.isEmpty) return
+
+    val stats = data
+      .groupBy(b => (b.hotelName, b.destinationCountry, b.destinationCity))
+      .map { case ((hotel, country, city), list) =>
+        (
+          hotel, country, city,
+          list.map(_.noOfPeople).sum,
+          list.map(_.profitMargin).sum / list.size
+        )
+      }.toList
+  }
+}
