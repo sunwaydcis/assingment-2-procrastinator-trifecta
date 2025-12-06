@@ -166,5 +166,16 @@ class ProfitableAnalysis extends AnalysisStrategy {
       val totalScore = (visScore + margScore) / 2.0
       (hotel, country, city, totalScore, vis, marg)
     }
+
+    val winner = scored.maxBy(_._4)
+    println("\n3. Most Profitable Hotel")
+    println("(Criteria: High Visitor Volume & High Profit Margin)")
+    println("=" * 50)
+    println(f"   Destination Country : ${winner._2}")
+    println(f"   Destination City    : ${winner._3}")
+    println(f"   Hotel Name          : ${winner._1}")
+    println(f"   Total Visitors      : ${winner._5}")
+    println(f"   Avg Profit Margin   : ${winner._6 * 100}%.1f%%")
+  
   }
 }
