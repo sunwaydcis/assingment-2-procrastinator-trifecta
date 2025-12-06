@@ -154,5 +154,17 @@ class ProfitableAnalysis extends AnalysisStrategy {
           list.map(_.profitMargin).sum / list.size
         )
       }.toList
+
+    val visitors = stats.map(_._4.toDouble)
+    val margins = stats.map(_._5)
+    val (minV, maxV) = (visitors.min, visitors.max)
+    val (minM, maxM) = (margins.min, margins.max)
+
+    val scored = stats.map { case (hotel, country, city, vis, marg) =>
+      val visScore = MathUtils.normalize(vis.toDouble, minV, maxV)
+      val margScore = MathUtils.normalize(marg, minM, maxM)
+      val totalScore = (visScore + margScore) / 2.0
+      (hotel, country, city, totalScore, vis, marg)
+    }
   }
 }
